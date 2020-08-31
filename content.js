@@ -1,12 +1,27 @@
-document.querySelector("#MainBox").style.width = "75%"
-document.querySelector("#tabs").style.width = "5%"
-var myPanel = document.createElement('div')
-myPanel.style.width = "20%"
-myPanel.style.height = "1000px"
-myPanel.style.backgroundColor = "red"
-myPanel.style.float = "right"
+document.querySelector("#MainBox").style.width = "53%"
+document.querySelector("#MainBox").style.float = "right"
+
+document.querySelector("#tabs").style.float = "right"
+document.querySelector("#tabs").style.width = "7%"
+var fundamentalPanel = document.createElement('div')
+fundamentalPanel.style.width = "20%"
+fundamentalPanel.style.height = "1000px"
+fundamentalPanel.style.backgroundColor = "yellow"
+fundamentalPanel.style.float = "right"
 var target = document.querySelector("#form1")
-target.insertBefore(myPanel, target.lastChild)
+target.insertAdjacentElement("beforeend",fundamentalPanel)
+
+
+var widgetPanel = document.createElement('div')
+widgetPanel.style.width = "20%"
+widgetPanel.style.height = "1000px"
+widgetPanel.style.backgroundColor = "red"
+widgetPanel.style.float = "left"
+var target = document.querySelector("#form1")
+target.insertAdjacentElement("beforeend",widgetPanel)
+
+
+
 
 //my aim
 
@@ -33,7 +48,7 @@ var dealToMean = () => {
 }
 
 
-//cahnge box 6 style
+//cahnge box 6 style / 
 var changeStyleOfBox6 = () => {
     document.querySelector("#TopBox > div.box2.zi2 > div:nth-child(1) > table > tbody > tr:nth-child(6)") //blue
     document.querySelector("#TopBox > div.box2.zi2 > div:nth-child(1) > table > tbody > tr:nth-child(2)") // blue
@@ -41,6 +56,70 @@ var changeStyleOfBox6 = () => {
     document.querySelector("#TopBox > div.box2.zi2 > div:nth-child(1) > table > tbody > tr:nth-child(1) > td:nth-child(3)")//red
     document.querySelector("#TopBox > div.box2.zi2 > div:nth-child(1) > table > tbody > tr:nth-child(4) > td:nth-child(2)")//green
     document.querySelector("#TopBox > div.box2.zi2 > div:nth-child(1) > table > tbody > tr:nth-child(4) > td:nth-child(3)")//red
+}
+
+//convert table to chart
+var convertBox6toChart = ()=>{
+    let xAxis={
+        visble: false
+    }
+    let yAxis ={
+        visible: false
+    }
+    let chart={
+        renederto:'??'
+    }
+    let tooltip={
+        enabled: false
+    }
+    let legend={
+        enabled: false
+    }
+     let credits={
+         enabled: false
+     }
+     let series=[
+        {
+            name: 'real',
+            data: [
+                {y:`${document.getElementById("#e0").textContent}`,color: 'green'}, //خرید حقیقی
+                {y:`${document.getElementById("#e3").textContent}`,color: '#FF0000'}] //فروش حقیقی
+        }
+        ,
+        {
+            name: 'corp',
+            data: [
+                {y:`${document.getElementById("#e1").textContent}`,color: 'green'}, //خرید حقوقی
+                {y:`${document.getElementById("#e4").textContent}`,color: '#FF0000'}] // فروش حقوقی
+        }
+    ]
+    let plotOptions = {
+        bar: {
+            dataLabels: {
+                enabled: true
+            },
+            enableMouseTracking: false
+        },
+        series: {
+            stacking: 'percent',
+            groupPadding: 0,
+            // pointPadding: 0,
+        }
+    };
+    let json = {};
+
+    json.title = title;
+    json.subtitle = subtitle;
+    json.xAxis = xAxis;
+    json.yAxis = yAxis;
+    json.tooltip = tooltip;
+    json.legend = legend;
+    json.series = series;
+    json.plotOptions = plotOptions;
+    json.credits = credits;
+    json.chart = chart
+
+    Highcahrts.chart('container',json)
 }
 
 
@@ -56,10 +135,10 @@ var volQueObserver = () => {
     }
 
     var scope = document.querySelector("#bl > tr:nth-child(2) > td:nth-child(2)")// buyers que
-    var observer = new MutationObserver(element => {
-        point.b=element.valu //?
-        point.s = document.querySelector("#bl > tr:nth-child(2) > td:nth-child(5)").textContent; //better is to get the title valu property
-        point.v = document.querySelector("#d09 > div").textContent;
+    var observer = new MutationObserver(mutationRecord => {
+        point.b=mutationRecord //?
+        point.s = document.querySelector("#bl > tr:nth-child(2) > td:nth-child(5)").textContent;
+        point.v = document.querySelector("#d09 > div").getAttribute('title');
         updateQVplot(point)
     })
     observer.observe(scope, {
